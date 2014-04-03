@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
       user.uid = auth["uid"]
       user.name = auth["extra"]["name"]
       user.access_token = auth["credentials"]["token"]
+      user.fb_graph_cache = auth
     end
   end
 end
