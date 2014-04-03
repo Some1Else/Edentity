@@ -1,0 +1,168 @@
+@import lib/normalize
+@import lib/scss_blend_modes/blend-mode
+@import lib/responsive_grid_system/all
+@import colors
+
+@media (max-width: 720px)
+  +grid(handheld, 100%, 12, 5%)
+  +type(handheld, 13px)
+
+@media (min-width: 720px) and (max-width: 1024px)
+  +grid(tablet, 720px, 12, 16px)
+  +type(tablet, 13px)
+
+  header ul li a img
+    left: -1em !important
+
+@media (min-width: 1024px) and (max-width: 1440px)
+  // @media (min-width: 970px) and (max-width: 1140px)
+  +grid(screen, 980px, 12, 20px)
+  +type(screen, 14px)
+
+  header ul li a img
+    left: -0.5em !important
+
+  header
+    height: 500px
+
+@media (min-width: 1440px)
+  // @media (min-width: 1140px)
+  +grid(huge, 1138px, 12, 30px)
+  +type(huge, 16px)
+  
+  header
+    height: 599px
+
+::selection
+  // background-color: #
+
+.mono
+  font-family: 'Resolution'
+  -moz-font-feature-settings: "liga=1, dlig=1, smcp=1"
+  -ms-font-feature-settings: "liga", "dlig", "smcp"
+  -webkit-font-feature-settings: "liga", "dlig", "smcp"
+  -o-font-feature-settings: "liga", "dlig", "smcp"
+  font-feature-settings: "liga", "dlig", "smcp"
+=mono
+  @extend .mono
+
+.serif
+  font-family: Georgia, serif
+  
+=serif
+  @extend .serif
+
+.italic
+  font-style: italic
+=italic
+  @extend .italic
+
+// .heavy
+//   font-weight: 800
+// =heavy
+//   @extend .heavy
+.bold
+  font-weight: 700
+=bold
+  @extend .bold
+.medium
+  font-weight: 600
+=medium
+  @extend .medium
+.book
+  font-weight: 400
+=book
+  @extend .book
+.light
+  font-weight: 300
+=light
+  @extend .light
+
+.center
+  text-align: center
+=center
+  @extend .center
+
+h1, h2, h3, h4, h5, h6
+  +serif
+
+.royalSlider, .rsDefault, .rsDefault .rsOverflow,
+.rsDefault .rsSlide, .rsDefault .rsVideoFrameHolder,
+.rsDefault .rsThumbs
+  background: transparent
+
+a
+  color: $primary
+  text-decoration: underline
+html
+  background: $white
+  color: $black
+
+html, body
+  height: 100%
+
+.container-full-height
+  height: 100%
+  padding:
+    top: 0
+    bottom: 0
+.page
+  display: table
+  height: 100%
+  width: 100%
+  color: $primary
+  
+.page-content
+  display: table-cell
+  vertical-align: middle
+  width: 100%
+
+.underlined
+  text-decoration: underline
+
+body
+  // -webkit-font-smoothing: subpixel-antialiased
+  // font-smoothing: antialiased
+  // -webkit-font-smoothing: antialiased
+  // font-smoothing: subpixel-antialiased
+  // font-smoothing: subpixel-antialiased !important
+  text-rendering: optimizeLegibility  
+  margin: 0
+  padding: 0
+  +mono
+  
+  .whitype
+    -webkit-font-smoothing: antialiased
+
+.white-on-dark
+  font-smoothing: antialiased
+  -webkit-font-smoothing: antialiased
+
+.loading img
+  opacity: 0
+  +transition(opacity, .4s)
+
+.app img
+  // +transition(opacity, .4s)
+
+#skrollr-body
+  width: 100%
+
+.cover
+  background-size: 100% auto
+  background-repeat: no-repeat
+
+.the-name
+  +scale(2)
+  display: inline-block
+  background: $white
+  color: $primary
+  margin-top: 10em
+  line-height: 300%
+  padding: 0 1em
+
+
+
+
+
+

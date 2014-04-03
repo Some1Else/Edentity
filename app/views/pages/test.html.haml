@@ -1,0 +1,135 @@
+
+
+.container.container-full-height
+
+  #user_nav{style: "position: absolute; left: 0; top: 0; display: none;"}
+    - if current_user
+      Welcome
+      = current_user.name + "!"
+      = link_to "Sign Out", signout_path
+    - else
+      = link_to "Sign in with Facebook", "/auth/facebook"
+
+  - user = User.last
+  - unless user == nil
+    - fb_user = FbGraph::User.fetch('Some1Else', access_token: user.access_token)    
+    - album = fb_user.albums.detect do |album|
+      - album.type == 'profile'
+    - profile_pictures = album.photos
+    - pic = profile_pictures.first.images.first.source   
+    - # pic = fb_user.pic_big
+    .cover.page-1.page{style: "background-image: url(#{pic});"}
+      .page-content.align_center
+        .the-name
+          = fb_user.name
+          = "|"
+
+    -# raise fb_user.inspect
+    
+    .page-2.page
+      .page-content.align_center
+        .underlined
+          %p
+            Welcome to your life
+            = fb_user.name
+        .dates
+          .born
+            %p
+              born:
+              = fb_user.birthday
+
+    .page-3.page
+      .page-content.align_center
+        .underlined
+          %p
+            Topics you are interested in
+        %p
+          = '#idk'
+
+    .page-4.page
+      .page-content.align_center
+        .underlined
+          %p
+            Map of places you have visited
+
+    .page-5.page
+      .page-content.align_center
+        .underlined
+          %p
+            Things that you like
+
+        - fb_user.likes.each do |like|
+          %p
+            = like.name
+    .page-5.page
+      .page-content.align_center
+        .underlined
+          %p Events you have attended
+
+        - fb_user.events.each do |event|
+          %p
+            = event.name
+            %br
+            %em
+              %strong
+                - if event.start_time.year < Time.now.year
+                  = "#{event.location}, #{event.start_time.strftime('%b %e %Y')}"
+                - else              
+                  = "#{event.location}, #{event.start_time.strftime('%b %e')}"
+    
+    .page-x.page
+      .page-content.align_center
+        .underlined
+          %p Private Messages
+        
+        - # activities = fb_user.activities
+        - # books = fb_user.books
+        - # family = fb_user.family
+        - # friends = fb_user.friends
+        - # groups = fb_user.groups
+        - # interests = fb_user.interests
+        - # notes = fb_user.notes
+        - inbox = fb_user.inbox
+        - inbox.each do |inbox_feed|
+          - inbox_feed.raw_attributes[:comments][:data].each do |inbox_comment|
+            - if inbox_comment[:from] != nil
+              .underlined
+                %p
+                - if inbox_comment[:from].has_key?(:name)
+                  = inbox_comment[:from][:name]
+                - else
+                  - if inbox_comment[:from].has_key?(:id)
+                    = inbox_comment[:form][:id]
+                  - else
+                    = inbox_comment[:from]
+
+            %p
+              = inbox_comment[:message]
+
+        - # outbox = fb_user.outbox
+
+    .page-x.page
+      .page-content.align_center
+        .underlined
+          %p Disclaimer
+        %p
+          E-dentity is a project that asks a participant to login to its Facebook account, then takes his/ her private data from their profile and automati- cally prints them in an understand- able booklet that is handed to the user. This booklet seeks to raise awareness of the hidden data we are sharing which we are often not aware of. Data is not being kept for any reasons other than stated above.
+        %p
+          &nbsp;
+        %p
+          Part of communication design question “Can the internet ever forget?”
+        
+        .underlined
+          %p
+            %a{:href => 'http://temporaryhaven.tumblr.com'} temporaryhaven.tumblr.com
+        %p
+          Emil Kozole
+        %p
+          %em
+            %strong 2014
+    -# raise fb_user.inspect
+    
+    %p.col_12
+      / = debug user
+      / = debug fb_user
+      / = img = FbGraph:: fb_user.picture
