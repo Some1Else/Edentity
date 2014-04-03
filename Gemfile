@@ -21,6 +21,10 @@ group :development do
 
 end
 
+group :production do
+  gem 'pg'
+end
+
 gem 'haml-rails'
 
 # Use SCSS for stylesheets
