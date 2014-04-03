@@ -1,18 +1,19 @@
 
 
 .container.container-full-height
-
-  #user_nav{style: "position: absolute; left: 0; top: 0; display: none;"}
+  
+  #user_nav{style: "position: absolute; left: 0; top: 0"}
     - if current_user
-      Welcome
-      = current_user.name + "!"
       = link_to "Sign Out", signout_path
     - else
       = link_to "Sign in with Facebook", "/auth/facebook"
+  
 
-  - user = User.last
+
+  - user = current_user
   - unless user == nil
-    - fb_user = FbGraph::User.fetch('Some1Else', access_token: user.access_token)    
+    - username = 
+    - fb_user = FbGraph::User.fetch(user.uid, access_token: user.access_token)    
     - album = fb_user.albums.detect do |album|
       - album.type == 'profile'
     - profile_pictures = album.photos
