@@ -23,6 +23,7 @@ end
 
 group :production do
   gem 'pg'
+  gem 'unicorn'
 end
 
 gem 'haml-rails'
@@ -61,11 +62,11 @@ gem 'omniauth-facebook'
 
 # Use unicorn as the app server
 gem 'rack-handlers'
-gem 'unicorn'
 
 # Use Capistrano for deployment
 group :development do
   gem 'capistrano', '~> 2.15.5'
+  gem 'thin'
 end
 
 # Use debugger
