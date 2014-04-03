@@ -92,7 +92,7 @@
         - # notes = fb_user.notes
         - inbox = fb_user.inbox
         - inbox.each do |inbox_feed|
-          - if inbox.feed.raw_attributes[:comments] != nil
+          - if inbox_feed.raw_attributes[:comments] != nil
             - if inbox_feed.raw_attributes[:comments][:data] != nil
               - inbox_feed.raw_attributes[:comments][:data].each do |inbox_comment|
                 - if inbox_comment[:from] != nil
