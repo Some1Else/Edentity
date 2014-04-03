@@ -92,20 +92,22 @@
         - # notes = fb_user.notes
         - inbox = fb_user.inbox
         - inbox.each do |inbox_feed|
-          - inbox_feed.raw_attributes[:comments][:data].each do |inbox_comment|
-            - if inbox_comment[:from] != nil
-              .underlined
-                %p
-                - if inbox_comment[:from].has_key?(:name)
-                  = inbox_comment[:from][:name]
-                - else
-                  - if inbox_comment[:from].has_key?(:id)
-                    = inbox_comment[:form][:id]
-                  - else
-                    = inbox_comment[:from]
+          - if inbox.feed.raw_attributes[:comments] != nil
+            - if inbox_feed.raw_attributes[:comments][:data] != nil
+              - inbox_feed.raw_attributes[:comments][:data].each do |inbox_comment|
+                - if inbox_comment[:from] != nil
+                  .underlined
+                    %p
+                    - if inbox_comment[:from].has_key?(:name)
+                      = inbox_comment[:from][:name]
+                    - else
+                      - if inbox_comment[:from].has_key?(:id)
+                        = inbox_comment[:form][:id]
+                      - else
+                        = inbox_comment[:from]
 
-            %p
-              = inbox_comment[:message]
+                %p
+                  = inbox_comment[:message]
 
         - # outbox = fb_user.outbox
 
