@@ -1,12 +1,12 @@
 
 
-.container.container-full-height
+.container.container-full-height.image-container
   
-  #user_nav{style: "position: absolute; left: 0; top: 0"}
-    - if current_user
-      = link_to "Sign Out", signout_path
-    - else
-      = link_to "Sign in with Facebook", "/auth/facebook"
+  / #user_nav{style: "position: absolute; left: 0; top: 0"}
+  /   - if current_user
+  /     = link_to "Sign Out", signout_path
+  /   - else
+  /     = link_to "Sign in with Facebook", "/auth/facebook"
   
 
 
@@ -14,18 +14,20 @@
   - unless user == nil
     - username = 
     - fb_user = FbGraph::User.fetch(user.uid, access_token: user.access_token)    
-    - album = fb_user.albums.detect do |album|
-      - album.type == 'profile'
+    
+    -# raise "halt".inspect
+    
+    - album = fb_user.albums.detect { |album| album.type == 'profile' }
     - profile_pictures = album.photos
-    - pic = profile_pictures.first.images.first.source   
-    - # pic = fb_user.pic_big
-    .cover.page-1.page{style: "background-image: url(#{pic});"}
+    - pic = profile_pictures.first.images.first.source  
+
+    
+    .cover.page-1.page
       .page-content.align_center
+        %img.the-pictur{:src => "#{pic}"}
         .the-name
           = fb_user.name
           = "|"
-
-    -# raise fb_user.inspect
     
     .page-2.page
       .page-content.align_center
@@ -39,19 +41,42 @@
               born:
               = fb_user.birthday
 
-    .page-3.page
-      .page-content.align_center
-        .underlined
-          %p
-            Topics you are interested in
-        %p
-          = '#idk'
+    - looped_once = false
+    - looped_times = 0
+    - poasts = fb_user.posts 
+    - tags = []
 
-    .page-4.page
-      .page-content.align_center
-        .underlined
-          %p
-            Map of places you have visited
+    - while ((looped_once == false or poasts.next) and (looped_times < 3))
+      - poasts.each do |post|
+        - if post.message
+          - message_tags = post.message.scan /(?:\s|^)(?:#(?!\d+(?:\s|$)))(\w+)(?=\s|$)/i
+        - unless message_tags.blank?
+          - message_tags.each do |tag|
+            - tags << "##{tag[0]}"
+      
+      - poasts = poasts.next
+      - looped_once = true
+      - looped_times += 1
+    
+    - unless tags.empty?
+
+      .page-3.page
+        .page-content.align_center
+          .underlined
+            %p
+              Topics you are interested in
+
+          - tags.each do |tag|
+            %p
+              = tag
+
+        
+
+    / .page-4.page
+    /   .page-content.align_center
+    /     .underlined
+    /       %p
+    /         Map of places you have visited
 
     .page-5.page
       .page-content.align_center
@@ -62,22 +87,51 @@
         - fb_user.likes.each do |like|
           %p
             = like.name
+
+
+    .page-y.page
+      .page-content.align_center
+        .underlined
+          %p Things you are saying
+        
+
+        - fb_user.statuses.shuffle.take(8).each do |status|
+          %br
+          %p.scale_2
+            = '"' + "#{status.raw_attributes['message']}" + '"'
+    
+
     .page-5.page
       .page-content.align_center
         .underlined
           %p Events you have attended
+        
+        - looped_once = false
+        - looped_times = 0
+        - events = fb_user.events 
 
-        - fb_user.events.each do |event|
-          %p
-            = event.name
-            %br
-            %em
-              %strong
-                - if event.start_time.year < Time.now.year
-                  = "#{event.location}, #{event.start_time.strftime('%b %e %Y')}"
-                - else              
-                  = "#{event.location}, #{event.start_time.strftime('%b %e')}"
-    
+        - while ((looped_once == false or events.next) and (looped_times < 3))
+          - events.each do |event|
+            %p
+              = event.name
+              %br
+              %em
+                %strong
+                  - if event.start_time.year < Time.now.year
+                    - if event.location.blank?
+                      = "#{event.start_time.strftime('%b %e %Y')}"
+                    - else
+                      = "#{event.location}, #{event.start_time.strftime('%b %e %Y')}"
+                  - else
+                    - if event.location.blank?             
+                      = "#{event.start_time.strftime('%b %e')}"
+                    - else
+                      = "#{event.location}, #{event.start_time.strftime('%b %e')}"
+            
+          - events = events.next
+          - looped_once = true
+          - looped_times += 1
+        
     .page-x.page
       .page-content.align_center
         .underlined
