@@ -1,12 +1,13 @@
 
 
+
 .container.container-full-height.image-container
   
-  / #user_nav{style: "position: absolute; left: 0; top: 0"}
-  /   - if current_user
-  /     = link_to "Sign Out", signout_path
-  /   - else
-  /     = link_to "Sign in with Facebook", "/auth/facebook"
+  #user_nav{style: "position: absolute; left: 0; top: 0"}
+    - if current_user
+      = link_to "Sign Out", signout_path
+    - else
+      = link_to "Sign in with Facebook", "/auth/facebook"
   
 
 
@@ -72,11 +73,16 @@
 
         
 
-    / .page-4.page
-    /   .page-content.align_center
-    /     .underlined
-    /       %p
-    /         Map of places you have visited
+    - places = fb_user.locations.collect{|loc| loc.place.name}
+    - unless places.empty? or places == nil
+      .page-4.page
+        .page-content.align_center
+          .underlined
+            %p
+              Places you have visited
+          - places.uniq.each do |place|
+            %p
+              = place
 
     .page-5.page
       .page-content.align_center
