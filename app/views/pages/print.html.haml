@@ -2,17 +2,11 @@
   $ ->
     $('body').imagesLoaded ->
       window.print()
-      # window.location = "/cleaning"
+      window.location = "/cleaning"
 
 .container.container-full-height.image-container
   
   .screen-only
-    #user_nav{style: "position: absolute; left: 0; top: 0"}
-      - if current_user
-        = link_to "Sign Out", signout_path
-      - else
-        = link_to "Sign in with Facebook", "/auth/facebook"
-
     .page-1.page.progress-page
       .page-content.align_center
         .full-page.surf-blue.top-half.verticalize-container
@@ -39,7 +33,7 @@
   
 
     .print-only
-      .cover.page-1.print-page
+      .cover.page-1.print-page.full-page
         .print-page-content.align_center
           - unless pic == nil
             %img.the-pictur{:src => "#{pic}"}
@@ -48,12 +42,12 @@
             = fb_user.name
             = "|"
       
-      .spacer.print-page
+      .spacer.print-page.full-page
         .print-page-content.align_center
           %p
             &nbsp;
 
-      .print-page-2.print-page
+      .print-page-2.print-page.full-page
         .print-page-content.align_center
           .underlined
             %p
@@ -84,7 +78,7 @@
         - looped_times += 1
       
       - unless tags.empty?
-        .print-page-3.print-page.complex-page
+        .print-page-3.print-page.complex-page.full-page
           .print-page-content.align_center
             .underlined
               %p
@@ -99,7 +93,7 @@
 
       - places = fb_user.locations.collect{|loc| loc.place.name}
       - unless places.empty? or places == nil
-        .print-page-4.print-page.complex-page
+        .print-page-4.print-page.complex-page.full-page
           .print-page-content.align_center
             .underlined
               %p
@@ -109,7 +103,7 @@
                 %p
                   = place
 
-      .print-page-5.print-page.complex-page
+      .print-page-5.print-page.complex-page.full-page
         .print-page-content.align_center
           .underlined
             %p
@@ -121,7 +115,7 @@
                 = like.name
 
 
-      .print-page-y.print-page.complex-page
+      .print-page-y.print-page.complex-page.full-page
         .print-page-content.align_center
           .underlined
             %p Things you are saying
@@ -133,7 +127,7 @@
                 = '"' + "#{status.raw_attributes['message']}" + '"'
       
 
-      .print-page-5.print-page.complex-page
+      .print-page-5.print-page.complex-page.full-page
         .print-page-content.align_center
           .underlined
             %p Events you have attended
@@ -142,7 +136,7 @@
           - looped_times = 0
           - events = fb_user.events 
 
-          - while ((looped_once == false or events.next) and (looped_times < 3))
+          - while ((looped_once == false or events.next) and (looped_times < 1))
             - events.each do |event|
               .part
                 %p
@@ -165,40 +159,50 @@
             - looped_once = true
             - looped_times += 1
           
-      .print-page-x.print-page.complex-page
-        .print-page-content.align_center
-          .underlined
-            %p Private Messages
-          
-          - # activities = fb_user.activities
-          - # books = fb_user.books
-          - # family = fb_user.family
-          - # friends = fb_user.friends
-          - # groups = fb_user.groups
-          - # interests = fb_user.interests
-          - # notes = fb_user.notes
-          - inbox = fb_user.inbox
-          - inbox.each do |inbox_feed|
-            - if inbox_feed.raw_attributes[:comments] != nil
-              - if inbox_feed.raw_attributes[:comments][:data] != nil
-                - inbox_feed.raw_attributes[:comments][:data].each do |inbox_comment|
-                  - if inbox_comment[:from] != nil
-                    .underlined
-                      %p
-                      - if inbox_comment[:from].has_key?(:name)
-                        = inbox_comment[:from][:name]
-                      - else
-                        - if inbox_comment[:from].has_key?(:id)
-                          = inbox_comment[:form][:id]
+      - # activities = fb_user.activities
+      - # books = fb_user.books
+      - # family = fb_user.family
+      - # friends = fb_user.friends
+      - # groups = fb_user.groups
+      - # interests = fb_user.interests
+      - # notes = fb_user.notes
+      - inbox = fb_user.inbox
+      - inbox.each_with_index do |inbox_feed, k|
+        - unless k > 3
+          .print-page-x.print-page.complex-page.full-page
+            .print-page-content.align_center
+              .underlined
+                %p Private Messages
+              
+              - if inbox_feed.raw_attributes[:comments] != nil
+                - if inbox_feed.raw_attributes[:comments][:data] != nil
+                  - inbox_comments = inbox_feed.raw_attributes[:comments][:data]
+
+                  - inbox_comments = inbox_comments.reject{|c| c[:message] == nil or c[:message].strip == '' }
+                  - inbox_comments = inbox_comments.reject{|c| c[:message] != nil and c[:message].include? 'http'}
+                  
+                  - if inbox_comments.size > 10
+                    - inbox_comments = inbox_comments.sort_by{|x| x.length}.reverse
+                    - limit = (inbox_comments.size / 2).ceil
+                    - inbox_comments = inbox_comments.take(limit)
+
+                  - inbox_comments.shuffle.take(5).each do |inbox_comment|
+                    - if inbox_comment[:from] != nil
+                      .underlined
+                        %p
+                        - if inbox_comment[:from].has_key?(:name)
+                          = inbox_comment[:from][:name]
                         - else
-                          = inbox_comment[:from]
-                  .part
-                    %p
-                      = inbox_comment[:message]
+                          - if inbox_comment[:from].has_key?(:id)
+                            = inbox_comment[:form][:id]
+                          - else
+                            = inbox_comment[:from]
+                    .part
+                      %p
+                        = inbox_comment[:message]
 
-          - # outbox = fb_user.outbox
 
-      .print-page-x.print-page.last-page
+      .print-page-x.print-page.last-page.full-page
         .print-page-content.align_center
           .underlined
             %p Disclaimer

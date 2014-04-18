@@ -125,11 +125,21 @@ html, body
   display: table
   color: $primary
   background: $white
-  
-  p.complex
-    text-overflow: ellipsis
+
+.complex-page
+  .part
+    -ms-word-break: break-all
     word-break: break-all
-    word-wrap: break-word
+    /* Non standard for webkit */
+    word-break: break-word
+    -webkit-hyphens: auto
+    -moz-hyphens: auto
+    -ms-hyphens: auto
+    hyphens: auto
+
+    // text-overflow: ellipsis
+    // word-break: break-all
+    // word-wrap: hyphenate
 
 *
   box-sizing: border-box
@@ -143,13 +153,15 @@ html, body
   vertical-align: middle
 
 .page
-  width: 100%
   margin: 0 auto
+.screen-only
+  .page
+    width: 100%
 
 .print-page
+  height: 29.6cm
   width: 21cm
-  padding: 2cm
-  padding: 1cm auto
+  // padding: 1cm auto
 
 .sign-in
   a
@@ -164,35 +176,38 @@ html, body
   a:hover
     color: $primary
     background: $white
-.top-half
-  .head
-    // padding-top: 7cm
 
+.screen-only
+  .full-page, .half-page
+    width: 100%
 
+.print-only
+  .full-page, .half-page
+    width: 21cm
+    padding: 0 4cm
 
-.print-page
+.screen-only
+  .full-page
+    height: 100%
+  .half-page
+    height: 50%
+  // vertical-align: middle
+
+@media print      
   .half-page
     min-height: 29.6/2 * 1cm
   .full-page
-    min-height: 29.6cm
+    min-height: 100%
 
-.full-page
-  width: 100%
-  @media screen
-    height: 100%
-.half-page
-  width: 100%
-  @media screen
-    // vertical-align: middle
-    height: 50%
 
 .page-content, .print-page-content
   display: table-cell
   vertical-align: middle
-.page-content
   height: 100%
 
-@media screen
+.page-content
+
+.screen-only
   .page
     height: 100%
 
@@ -207,17 +222,16 @@ html, body
   background-size: 100% auto
 
 .half-white
-  @media screen
-    padding: 0 20%
+  padding: 0 30%
 
 @page
   size: A4
-  margin: 2cm
+  // margin: 2cm
   box-sizing: border-box
 
 @media print
   .print-page
-    margin: 0
+    // margin: 0
     // border: initial
     // border-radius: initial
     // width: initial 
@@ -277,11 +291,11 @@ body
   background: $white
   color: $primary
   margin: 0 auto
-  top: 50%
+  top: 29.7/2 * 1cm
   line-height: 3em
   margin-top: -1.5em
   width: 16em
-  left: 50%
+  left: 21/2 * 1cm
   margin-left: -8em
   padding: 0 1em
 
