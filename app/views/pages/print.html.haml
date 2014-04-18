@@ -1,0 +1,224 @@
+:coffeescript
+  $ ->
+    $('body').imagesLoaded ->
+      window.print()
+      # window.location = "/cleaning"
+
+.container.container-full-height.image-container
+  
+  .screen-only
+    #user_nav{style: "position: absolute; left: 0; top: 0"}
+      - if current_user
+        = link_to "Sign Out", signout_path
+      - else
+        = link_to "Sign in with Facebook", "/auth/facebook"
+
+    .page-1.page.progress-page
+      .page-content.align_center
+        .full-page.surf-blue.top-half.verticalize-container
+          .verticalize
+            .head
+              %p Gathering data
+            .info
+              %p Please wait
+
+  - user = current_user
+  - unless user == nil
+    - fb_user = FbGraph::User.fetch(user.uid, access_token: user.access_token)    
+    
+    -# raise "halt".inspect
+    
+    - album = fb_user.albums.detect { |album| album.type == 'profile' }
+    - profile_pictures = album.photos
+    - pic = profile_pictures.first.images.first.source
+
+    :coffeescript
+      img = new Image()
+      img.src = pic
+  
+
+    .print-only
+      .cover.page-1.print-page
+        .print-page-content.align_center
+          - unless pic == nil
+            %img.the-pictur{:src => "#{pic}"}
+
+          .the-name
+            = fb_user.name
+            = "|"
+      
+      .spacer.print-page
+        .print-page-content.align_center
+          %p
+            &nbsp;
+
+      .print-page-2.print-page
+        .print-page-content.align_center
+          .underlined
+            %p
+              Welcome to your life
+              = fb_user.name
+          .dates
+            .born
+              %p
+                born:
+                = fb_user.birthday
+
+
+      - looped_once = false
+      - looped_times = 0
+      - poasts = fb_user.posts 
+      - tags = []
+
+      - while ((looped_once == false or poasts.next) and (looped_times < 3))
+        - poasts.each do |post|
+          - if post.message
+            - message_tags = post.message.scan /(?:\s|^)(?:#(?!\d+(?:\s|$)))(\w+)(?=\s|$)/i
+          - unless message_tags.blank?
+            - message_tags.each do |tag|
+              - tags << "##{tag[0]}"
+        
+        - poasts = poasts.next
+        - looped_once = true
+        - looped_times += 1
+      
+      - unless tags.empty?
+        .print-page-3.print-page.complex-page
+          .print-page-content.align_center
+            .underlined
+              %p
+                Topics you are interested in
+
+            - tags.each do |tag|
+              .part
+                %p
+                  = tag
+
+          
+
+      - places = fb_user.locations.collect{|loc| loc.place.name}
+      - unless places.empty? or places == nil
+        .print-page-4.print-page.complex-page
+          .print-page-content.align_center
+            .underlined
+              %p
+                Places you have visited
+            - places.uniq.each do |place|
+              .part
+                %p
+                  = place
+
+      .print-page-5.print-page.complex-page
+        .print-page-content.align_center
+          .underlined
+            %p
+              Things that you like
+
+          - fb_user.likes.each do |like|
+            .part
+              %p
+                = like.name
+
+
+      .print-page-y.print-page.complex-page
+        .print-page-content.align_center
+          .underlined
+            %p Things you are saying
+          
+
+          - fb_user.statuses.shuffle.take(8).each do |status|
+            .part
+              %p.scale_2
+                = '"' + "#{status.raw_attributes['message']}" + '"'
+      
+
+      .print-page-5.print-page.complex-page
+        .print-page-content.align_center
+          .underlined
+            %p Events you have attended
+          
+          - looped_once = false
+          - looped_times = 0
+          - events = fb_user.events 
+
+          - while ((looped_once == false or events.next) and (looped_times < 3))
+            - events.each do |event|
+              .part
+                %p
+                  = event.name
+                  %br
+                  %em
+                    %strong
+                      - if event.start_time.year < Time.now.year
+                        - if event.location.blank?
+                          = "#{event.start_time.strftime('%b %e %Y')}"
+                        - else
+                          = "#{event.location}, #{event.start_time.strftime('%b %e %Y')}"
+                      - else
+                        - if event.location.blank?             
+                          = "#{event.start_time.strftime('%b %e')}"
+                        - else
+                          = "#{event.location}, #{event.start_time.strftime('%b %e')}"
+                
+            - events = events.next
+            - looped_once = true
+            - looped_times += 1
+          
+      .print-page-x.print-page.complex-page
+        .print-page-content.align_center
+          .underlined
+            %p Private Messages
+          
+          - # activities = fb_user.activities
+          - # books = fb_user.books
+          - # family = fb_user.family
+          - # friends = fb_user.friends
+          - # groups = fb_user.groups
+          - # interests = fb_user.interests
+          - # notes = fb_user.notes
+          - inbox = fb_user.inbox
+          - inbox.each do |inbox_feed|
+            - if inbox_feed.raw_attributes[:comments] != nil
+              - if inbox_feed.raw_attributes[:comments][:data] != nil
+                - inbox_feed.raw_attributes[:comments][:data].each do |inbox_comment|
+                  - if inbox_comment[:from] != nil
+                    .underlined
+                      %p
+                      - if inbox_comment[:from].has_key?(:name)
+                        = inbox_comment[:from][:name]
+                      - else
+                        - if inbox_comment[:from].has_key?(:id)
+                          = inbox_comment[:form][:id]
+                        - else
+                          = inbox_comment[:from]
+                  .part
+                    %p
+                      = inbox_comment[:message]
+
+          - # outbox = fb_user.outbox
+
+      .print-page-x.print-page.last-page
+        .print-page-content.align_center
+          .underlined
+            %p Disclaimer
+          %p
+            E-dentity is a project that asks a participant to login to its Facebook account, then takes his/ her private data from their profile and automatically prints them in an understandable booklet that is handed to the user. This booklet seeks to raise awareness of the hidden data we are sharing which we are often not aware of. Data is not being kept for any reasons other than stated above.
+          %p
+            &nbsp;
+          / %p
+          /   Part of communication design question “Can the internet ever forget?”
+          
+          / .underlined
+          /   %p
+          /     %a{:href => 'http://temporaryhaven.tumblr.com'} temporaryhaven.tumblr.com
+          %p
+            Emil Kozole + Srđan Prodanović
+          %p
+            %em
+              %strong Galerija Aksioma, 2014
+      -# raise fb_user.inspect
+      
+      / %p.col_12
+      / = debug user
+      / = debug fb_user
+      / = img = FbGraph:: fb_user.picture

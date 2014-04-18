@@ -1,0 +1,29 @@
+:coffeescript    
+  $ ->
+    $.getScript '//connect.facebook.net/en_UK/all.js', () ->
+      
+      FB.init
+        appId: '236728149743944'
+      
+      updateStatusCallback = (res) ->
+        if (res.status == 'connected') 
+          FB.logout()
+
+      FB.getLoginStatus(updateStatusCallback)
+  
+
+.container.container-full-height
+
+  .page-1.page
+    .page-content.align_center
+      .half-page.surf-blue.top-half.verticalize-container
+        .verticalize
+          .head
+            %p E-dentity
+          %p.sign-in
+            = link_to "Sign in with Facebook", "/auth/facebook"
+      
+      .half-page.half-white.verticalize-container
+        .verticalize
+          %p
+            E-dentity is a project that asks a participant to login to its Facebook account, then takes his/ her private data from their profile and automatically prints them in an understandable booklet that is handed to the user. This booklet seeks to raise awareness of the hidden data we are sharing which we are often not aware of. Data is not being kept for any reasons other than stated above.

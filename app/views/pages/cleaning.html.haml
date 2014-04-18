@@ -1,0 +1,30 @@
+:coffeescript    
+  $ ->
+    $.getScript '//connect.facebook.net/en_UK/all.js', () ->
+      
+      FB.init
+        appId: '236728149743944'
+      
+      updateStatusCallback = (res) ->
+        if (res.status == 'connected') 
+          FB.logout()
+        
+        setTimeout( ->
+          window.location = "/"
+        ,
+          1000
+        )
+        
+      FB.getLoginStatus(updateStatusCallback)
+
+.container.container-full-height
+
+  .page-1.page.progress-page
+    .page-content.align_center
+      .full-page.surf-blue.top-half.verticalize-container
+        .verticalize
+          .head
+            %p Cleaning data
+          .info
+            %p Please wait
+      

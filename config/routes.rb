@@ -2,7 +2,10 @@ Edentity::Application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  root 'pages#test'
+  root 'pages#landing'
+  get 'print' => 'pages#print', :as => :print
+  get 'gathering' => 'pages#gathering', :as => :gathering
+  get 'cleaning' => 'pages#cleaning', :as => :cleaning
 
   get '/cached' => 'pages#testcached'
 
