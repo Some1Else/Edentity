@@ -4,6 +4,7 @@ Edentity::Application.routes.draw do
 
   root 'pages#test'
 
+  get '/cached' => 'pages#testcached'
 
   get "/auth/:provider/callback" => "sessions#create"
 

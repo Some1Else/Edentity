@@ -10,13 +10,14 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require underscore
 //= require jquery
 //= require jquery_ujs
 //= require lib/imagesloaded.pkgd
 //= require lib/packery.min
 //= require lib/jquery.easing-1.3
 //= require lib/jquery.royalslider.min
-//= require turbolinks
+// require turbolinks
 // require new-dim
 // require jquery.ui.datepicker
 // require lib/jquery.isotope.min
