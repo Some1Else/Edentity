@@ -4,11 +4,11 @@
 @import colors
 
 @media (max-width: 720px)
-  +grid(handheld, 100%, 12, 5%)
+  // +grid(handheld, 100%, 12, 5%)
   +type(handheld, 13px)
 
 @media (min-width: 720px) and (max-width: 1024px)
-  +grid(tablet, 720px, 12, 16px)
+  // +grid(tablet, 720px, 12, 16px)
   +type(tablet, 13px)
 
   header ul li a img
@@ -16,7 +16,7 @@
 
 @media (min-width: 1024px) and (max-width: 1440px)
   // @media (min-width: 970px) and (max-width: 1140px)
-  +grid(screen, 980px, 12, 20px)
+  // +grid(screen, 980px, 12, 20px)
   +type(screen, 14px)
 
   header ul li a img
@@ -27,7 +27,7 @@
 
 @media (min-width: 1440px)
   // @media (min-width: 1140px)
-  +grid(huge, 1138px, 12, 30px)
+  // +grid(huge, 1138px, 12, 30px)
   +type(huge, 16px)
   
   header
@@ -99,27 +99,128 @@ html
   color: $black
 
 html, body
-  height: 100%
+  // height: 100%
 
 .container-full-height
-  height: 100%
+  // height: 100%
   padding:
     top: 0
     bottom: 0
-.page
-  display: table
-  height: 100%
-  width: 100%
-  color: $primary
+    left: 0
+    right: 0
+  margin:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   
-.page-content
+.screen-only
+  .page
+    height: 100%
+    width: 100%
+
+.page, .print-page
+  display: table
+  color: $primary
+  background: $white
+  
+  p.complex
+    text-overflow: ellipsis
+    word-break: break-all
+    word-wrap: break-word
+
+*
+  box-sizing: border-box
+  -moz-box-sizing: border-box
+
+.verticalize-container
+  display: table
+.verticalize
+  display: table-cell
+  height: 100%
+  vertical-align: middle
+
+.page
+  width: 100%
+  margin: 0 auto
+
+.print-page
+  width: 21cm
+  padding: 2cm
+  padding: 1cm auto
+
+.sign-in
+  a
+    display: inline-block
+    border: 1px solid $white
+    color: $white
+    // background: $primary
+    text-decoration: none
+    padding: 1.2em 1.3em
+    // line-height: 300%
+    margin-top: 2em
+  a:hover
+    color: $primary
+    background: $white
+.top-half
+  .head
+    // padding-top: 7cm
+
+
+
+.print-page
+  .half-page
+    min-height: 29.6/2 * 1cm
+  .full-page
+    min-height: 29.6cm
+
+.full-page
+  width: 100%
+.half-page
+  width: 100%
+  // vertical-align: middle
+  // height: 50%
+
+.page-content, .print-page-content
   display: table-cell
   vertical-align: middle
-  width: 100%
+
+.print-page-content
+  width: 21cm
+
+.surf-blue
+  background: $primary
+  color: $white
+  background: url(/mooimg.jpg) no-repeat top center
+  background-size: 100% auto
+
+.half-white
+  @media screen
+    padding: 0 20%
+
+@page
+  size: A4
+  margin: 2cm
+  box-sizing: border-box
+
+@media print
+  .print-page
+    margin: 0
+    // border: initial
+    // border-radius: initial
+    // width: initial 
+    // min-height: initial
+    // box-shadow: initial
+    // background: initial
+    page-break-after: always
+  
+  .last-page
+    page-break-after: none
 
 .underlined
   text-decoration: underline
 
+    
 
 body
   // -webkit-font-smoothing: subpixel-antialiased
@@ -173,6 +274,13 @@ body
   padding: 0 1em
 
 
+@media screen
+  .print-only
+    display: none
+
+@media print
+  .screen-only
+    display: none
 
 
 

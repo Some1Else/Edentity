@@ -5,6 +5,46 @@
   <%= stylesheet_link_tag    "application", media: "all" %>
   <%= javascript_include_tag "application"%>
   <%= csrf_meta_tags %>
+  <script type="text/javascript">
+    $(function() {
+      var page_string = "<div class='page complex-page'> <div class='page-content align_center'> <div class='underlined'> {{ title }} </div> {{ content }} </div> </div>";
+
+      _.templateSettings = {
+        interpolate: /\{\{(.+?)\}\}/g
+      };
+
+      var page_template = _.template(page_string, {title: "hello", content: 'hi there'});
+
+      // console.log(page_template);
+
+      // new_page = page_template();
+      if (false) {
+
+        $('.complex-page').each(function(i, p) {
+          if ($(p).height() > $('.spacer').height()) {
+            parts = $(p).find('.part')
+            
+            startFrom = 0;
+            currentHeight = 0;
+
+            for (var x = 0; x < parts.length; x++) {
+              currentHeight += $(parts[x]).height();
+              if (currentHeight > $('.spacer').height()) {
+
+                // for (var y = x; y < parts.length; y++) {
+                //   $(new_page).find('.page-content').after(parts[y])
+                // }
+                // console.log('oh noes', parts[x])
+              }
+            }
+          }
+        })
+
+      }
+
+      // window.print()
+    })
+  </script>
 </head>
 <body>
 
