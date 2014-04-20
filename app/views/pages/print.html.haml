@@ -154,19 +154,19 @@
                 %p
                   = event.name
                   %br
+                
                   %em
-                    %strong
-                      - if event.start_time.year < Time.now.year
-                        - if event.location.blank?
-                          = "#{event.start_time.strftime('%b %e %Y')}"
-                        - else
-                          = "#{event.location}, #{event.start_time.strftime('%b %e %Y')}"
+                    - if event.start_time.year < Time.now.year
+                      - if event.location.blank?
+                        = "#{event.start_time.strftime('%b %e %Y')}"
                       - else
-                        - if event.location.blank?             
-                          = "#{event.start_time.strftime('%b %e')}"
-                        - else
-                          = "#{event.location}, #{event.start_time.strftime('%b %e')}"
-                  
+                        = "#{event.location}, #{event.start_time.strftime('%b %e %Y')}"
+                    - else
+                      - if event.location.blank?             
+                        = "#{event.start_time.strftime('%b %e')}"
+                      - else
+                        = "#{event.location}, #{event.start_time.strftime('%b %e')}"
+                
           
       - # activities = fb_user.activities
       - # books = fb_user.books
@@ -198,15 +198,15 @@
                   - inbox_comments.shuffle.take(5).each do |inbox_comment|
                     - if inbox_comment[:from] != nil
                       %p
-                        %strong
-                          %em
-                            - if inbox_comment[:from].has_key?(:name)
-                              = inbox_comment[:from][:name]
+                        %em
+                        
+                          - if inbox_comment[:from].has_key?(:name)
+                            = inbox_comment[:from][:name]
+                          - else
+                            - if inbox_comment[:from].has_key?(:id)
+                              = inbox_comment[:form][:id]
                             - else
-                              - if inbox_comment[:from].has_key?(:id)
-                                = inbox_comment[:form][:id]
-                              - else
-                                = inbox_comment[:from]
+                              = inbox_comment[:from]
                     .part
                       %p
                         = inbox_comment[:message]
@@ -229,8 +229,8 @@
           %p
             Emil Kozole + Srđan Prodanović
           %p
-            %em
-              %strong Galerija Aksioma, 2014
+            
+            %em Galerija Aksioma, 2014
       -# raise fb_user.inspect
       
       / %p.col_12
