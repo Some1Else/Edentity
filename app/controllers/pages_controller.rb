@@ -16,6 +16,7 @@ class PagesController < ApplicationController
 
   # STEP 4
   def cleaning
+    session[:user_id] = nil
   end
 
   def testcached

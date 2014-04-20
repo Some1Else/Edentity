@@ -9,13 +9,15 @@
   .screen-only
     .page-1.page.progress-page
       .page-content.align_center
-        .full-page.surf-blue.top-half.verticalize-container
+        .full-page.surf-blue.top-half.verticalize-container.loading-container
           .verticalize
             .head
               %p Printing report
             .info
               %p
                 %em Please wait
+            .loading
+              &nbsp;
 
   - user = current_user
   - unless user == nil
@@ -40,12 +42,12 @@
 
           .the-name
             = fb_user.name
-            = "|"
+            =# "|"
       
-      .spacer.print-page.full-page
-        .print-page-content.align_center
-          %p
-            &nbsp;
+      / .spacer.print-page.full-page
+      /   .print-page-content.align_center
+      /     %p
+      /       &nbsp;
 
       .print-page-2.print-page.full-page
         .print-page-content.align_center
@@ -62,7 +64,7 @@
 
       - looped_once = false
       - looped_times = 0
-      - poasts = fb_user.posts 
+      - poasts = fb_user.posts
       - tags = []
 
       - while ((looped_once == false or poasts.next) and (looped_times < 3))
@@ -123,21 +125,31 @@
 
           - fb_user.statuses.shuffle.take(8).each do |status|
             .part
-              %p.scale_2
+              %p
                 = '"' + "#{status.raw_attributes['message']}" + '"'
       
 
-      .print-page-5.print-page.complex-page.full-page
-        .print-page-content.align_center
-          .underlined
-            %p Events you have attended
-          
-          - looped_once = false
-          - looped_times = 0
-          - events = fb_user.events 
+      - looped_once = false
+      - looped_times = 0
+      - events = fb_user.events 
+      - all_events = []
 
-          - while ((looped_once == false or events.next) and (looped_times < 2))
-            - events.each do |event|
+      - while ((looped_once == false or events.next) and (looped_times < 2))
+        - all_events << events
+        - events = events.next
+        - looped_once = true
+        - looped_times += 1
+      
+      - ev_1 = events.take(15)
+      - ev_2 = events.drop(15)
+      - all_events = [ev_1, ev_2]
+      - all_events.each do |local_events|
+        .print-page-5.print-page.complex-page.full-page
+          .print-page-content.align_center
+            .underlined
+              %p Events you have attended
+            
+            - local_events.each do |event|
               .part
                 %p
                   = event.name
@@ -154,10 +166,7 @@
                           = "#{event.start_time.strftime('%b %e')}"
                         - else
                           = "#{event.location}, #{event.start_time.strftime('%b %e')}"
-                
-            - events = events.next
-            - looped_once = true
-            - looped_times += 1
+                  
           
       - # activities = fb_user.activities
       - # books = fb_user.books
@@ -188,15 +197,16 @@
 
                   - inbox_comments.shuffle.take(5).each do |inbox_comment|
                     - if inbox_comment[:from] != nil
-                      .underlined
-                        %p
-                        - if inbox_comment[:from].has_key?(:name)
-                          = inbox_comment[:from][:name]
-                        - else
-                          - if inbox_comment[:from].has_key?(:id)
-                            = inbox_comment[:form][:id]
-                          - else
-                            = inbox_comment[:from]
+                      %p
+                        %strong
+                          %em
+                            - if inbox_comment[:from].has_key?(:name)
+                              = inbox_comment[:from][:name]
+                            - else
+                              - if inbox_comment[:from].has_key?(:id)
+                                = inbox_comment[:form][:id]
+                              - else
+                                = inbox_comment[:from]
                     .part
                       %p
                         = inbox_comment[:message]
