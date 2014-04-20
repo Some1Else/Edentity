@@ -6,6 +6,7 @@ Edentity::Application.routes.draw do
   get 'print' => 'pages#print', :as => :print
   get 'gathering' => 'pages#gathering', :as => :gathering
   get 'cleaning' => 'pages#cleaning', :as => :cleaning
+  get 'debug/:id' => 'pages#debug', :as => :debug
 
   get '/cached' => 'pages#testcached'
 

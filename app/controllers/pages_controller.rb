@@ -19,6 +19,11 @@ class PagesController < ApplicationController
     session[:user_id] = nil
   end
 
+  def debug
+    @debug = User.find params[:id]
+    render :action => 'print'
+  end
+
   def testcached
   end
   

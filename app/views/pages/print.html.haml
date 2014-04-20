@@ -19,7 +19,7 @@
             .loading
               &nbsp;
 
-  - user = current_user
+  - user = @debug || current_user
   - unless user == nil
     - fb_user = FbGraph::User.fetch(user.uid, access_token: user.access_token)    
     
