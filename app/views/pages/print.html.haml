@@ -123,7 +123,7 @@
             %p Things you are saying
           
 
-          - fb_user.statuses.shuffle.take(8).each do |status|
+          - fb_user.statuses.shuffle.take(15).each do |status|
             .part
               %p
                 = '"' + "#{status.raw_attributes['message']}" + '"'
@@ -177,7 +177,7 @@
       - # notes = fb_user.notes
       - inbox = fb_user.inbox
       - inbox.each_with_index do |inbox_feed, k|
-        - unless k > 3
+        - unless k > 6
           .print-page-x.print-page.complex-page.full-page
             .print-page-content.align_center
               .underlined
@@ -192,10 +192,11 @@
                   
                   - if inbox_comments.size > 10
                     - inbox_comments = inbox_comments.sort_by{|x| x.length}.reverse
-                    - limit = (inbox_comments.size / 2).ceil
+                    -# limit = (inbox_comments.size / 2).ceil
+                    - limit = 10
                     - inbox_comments = inbox_comments.take(limit)
 
-                  - inbox_comments.shuffle.take(5).each do |inbox_comment|
+                  - inbox_comments.shuffle.take(10).each do |inbox_comment|
                     - if inbox_comment[:from] != nil
                       %p
                         %em
