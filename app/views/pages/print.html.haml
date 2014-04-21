@@ -1,6 +1,8 @@
 :coffeescript
   $ ->
     $('body').imagesLoaded ->
+      $('.screen-only .loading').hide()
+      $('.screen-only .sign-in').show()
       window.print()
       setTimeout( ->
         window.location = "/cleaning"
@@ -22,6 +24,8 @@
                 %em Please wait
             .loading
               &nbsp;
+            %p.sign-in{:style => "display: none;"}
+              %a{:href => "/cleaning"} Erase data
 
   - user = @debug || current_user
   - unless user == nil
