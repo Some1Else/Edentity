@@ -1,7 +1,8 @@
 :coffeescript    
   $ ->
     setTimeout( ->
-      window.location = "/print"
+      t = Date.now()
+      window.location = "/print?t=" + t
     ,
       1000
     )
