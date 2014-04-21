@@ -167,7 +167,21 @@
                       - else
                         = "#{event.location}, #{event.start_time.strftime('%b %e')}"
                 
-          
+      
+      - groups = fb_user.groups
+      - if groups.size > 0
+        - if groups.size > 15
+          - all_groups = [groups.take(15), groups.drop(15).take(15)]
+          - all_groups.each do |local_groups|
+            .print-page-x.print-page.complex-page.full-page
+              .print-page-content.align_center
+                .underlined
+                  %p Groups you are a member of
+
+                - local_groups.each_with_index do |group, k|
+                  - unless k > 15
+                    %p= group.name
+
       - # activities = fb_user.activities
       - # books = fb_user.books
       - # family = fb_user.family
