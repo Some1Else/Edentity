@@ -241,14 +241,10 @@
                       %p
                         = inbox_comment[:message]
       
+      - unless other_pic == nil
       .cover.page-x.print-page.full-page
         .print-page-content.align_center
-          - unless pic == nil
-            %img.the-pictur{:src => "#{other_pic}"}
-
-          .the-name
-            = fb_user.name
-            =# "|"
+          %img.the-pictur{:src => "#{other_pic}"}
 
       .print-page-x.print-page.last-page.full-page
         .print-page-content.align_center
