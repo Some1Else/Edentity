@@ -100,7 +100,13 @@
 
           
 
-      - places = fb_user.locations.collect{|loc| loc.place.name}
+      - places = fb_user.locations.collect do |loc|
+        - if loc.place != nil
+          - loc.place.name
+        - else
+          - if loc.from.raw_attributes[:category] != nil
+            - loc.from.name
+
       - unless places.empty? or places == nil
         .print-page-4.print-page.complex-page.full-page
           .print-page-content.align_center
