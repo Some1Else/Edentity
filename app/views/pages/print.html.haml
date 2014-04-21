@@ -208,42 +208,43 @@
       - # groups = fb_user.groups
       - # interests = fb_user.interests
       - # notes = fb_user.notes
-      - inbox = fb_user.inbox
-      - inbox.each_with_index do |inbox_feed, k|
-        - unless k > 3
-          .print-page-x.print-page.complex-page.full-page
-            .print-page-content.align_center
-              .underlined
-                %p Private Messages
-              
-              - if inbox_feed.raw_attributes[:comments] != nil
-                - if inbox_feed.raw_attributes[:comments][:data] != nil
-                  - inbox_comments = inbox_feed.raw_attributes[:comments][:data]
+      - if fb_user.permissions.include?(:read_mailbox)
+        - inbox = fb_user.inbox
+        - inbox.each_with_index do |inbox_feed, k|
+          - unless k > 3
+            .print-page-x.print-page.complex-page.full-page
+              .print-page-content.align_center
+                .underlined
+                  %p Private Messages
+                
+                - if inbox_feed.raw_attributes[:comments] != nil
+                  - if inbox_feed.raw_attributes[:comments][:data] != nil
+                    - inbox_comments = inbox_feed.raw_attributes[:comments][:data]
 
-                  - inbox_comments = inbox_comments.reject{|c| c[:message] == nil or c[:message].strip == '' }
-                  - inbox_comments = inbox_comments.reject{|c| c[:message] != nil and c[:message].include? 'http'}
-                  
-                  - if inbox_comments.size > 10
-                    - inbox_comments = inbox_comments.sort_by{|x| x.length}.reverse
-                    -# limit = (inbox_comments.size / 2).ceil
-                    - limit = 10
-                    - inbox_comments = inbox_comments.take(limit)
+                    - inbox_comments = inbox_comments.reject{|c| c[:message] == nil or c[:message].strip == '' }
+                    - inbox_comments = inbox_comments.reject{|c| c[:message] != nil and c[:message].include? 'http'}
+                    
+                    - if inbox_comments.size > 10
+                      - inbox_comments = inbox_comments.sort_by{|x| x.length}.reverse
+                      -# limit = (inbox_comments.size / 2).ceil
+                      - limit = 10
+                      - inbox_comments = inbox_comments.take(limit)
 
-                  - inbox_comments.shuffle.take(10).each do |inbox_comment|
-                    - if inbox_comment[:from] != nil
-                      %p
-                        %em
-                        
-                          - if inbox_comment[:from].has_key?(:name)
-                            = inbox_comment[:from][:name]
-                          - else
-                            - if inbox_comment[:from].has_key?(:id)
-                              = inbox_comment[:form][:id]
+                    - inbox_comments.shuffle.take(10).each do |inbox_comment|
+                      - if inbox_comment[:from] != nil
+                        %p
+                          %em
+                          
+                            - if inbox_comment[:from].has_key?(:name)
+                              = inbox_comment[:from][:name]
                             - else
-                              = inbox_comment[:from]
-                    .part
-                      %p
-                        = inbox_comment[:message]
+                              - if inbox_comment[:from].has_key?(:id)
+                                = inbox_comment[:form][:id]
+                              - else
+                                = inbox_comment[:from]
+                      .part
+                        %p
+                          = inbox_comment[:message]
       
       - unless other_pic == nil
         .cover.page-x.print-page.full-page
