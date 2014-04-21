@@ -2,7 +2,11 @@
   $ ->
     $('body').imagesLoaded ->
       window.print()
-      window.location = "/cleaning"
+      setTimeout( ->
+        window.location = "/cleaning"
+      ,
+        3000
+      )
 
 .container.container-full-height.image-container
   
@@ -27,11 +31,14 @@
     
     - album = fb_user.albums.detect { |album| album.type == 'profile' }
     - profile_pictures = album.photos
-    - pic = profile_pictures.first.images.first.source
+    - pic = profile_pictures.first.source
+    - other_pic = profile_pictures.last.source
     
     :coffeescript
-      img = new Image()
-      img.src = "#{pic}"
+      img1 = new Image()
+      img1.src = "#{pic}"
+      img2 = new Image()
+      img2.src = "#{other_pic}"
   
 
     .print-only
@@ -227,12 +234,20 @@
                     .part
                       %p
                         = inbox_comment[:message]
+      
+      .cover.page-x.print-page.full-page
+        .print-page-content.align_center
+          - unless pic == nil
+            %img.the-pictur{:src => "#{other_pic}"}
 
+          .the-name
+            = fb_user.name
+            =# "|"
 
       .print-page-x.print-page.last-page.full-page
         .print-page-content.align_center
           %p
-            E-dentity is your private album of content you have shared on Facebook. This booklet seeks to give users an insight to simplicity of gathering and analysing your most sensitive information. It asks a participant to login to its Facebook account, scrapes his history and automatically prints it in an understandable form that is handed to the user. In information society there is nothing more valuable than the information itself. This is given further impetus by the recent leaks where a number of mass-surveillance programs were undertaken by the NSA and GCHQ, demonstrating to us how our privacy has never as compromised as it is right now.
+            E-dentity is your private album of content you have shared on Facebook. This booklet seeks to give users an insight to simplicity of gathering and analysing your most sensitive information. It asks a participant to login to its Facebook account, scrapes his history and automatically prints it in an understandable form that is handed to the user. In information society there is nothing more valuable than the information itself. This is given further impetus by the recent leaks where a number of mass-surveillance programs were undertaken by the NSA and GCHQ, demonstrating to us how our privacy has never been as compromised as it is right now.
           .underlined
             %p
               Disclaimer:
