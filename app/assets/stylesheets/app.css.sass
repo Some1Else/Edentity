@@ -299,14 +299,27 @@ body
   position: absolute
   background: $white
   color: $primary
+
   margin: 0 auto
-  top: 29.7/2 * 1cm
-  line-height: 3em
   margin-top: -1.5em
+  top: 29.7/2 * 1cm
+  //max-width: 12cm
+  line-height: 3em
   width: 16em
   left: 21/2 * 1cm
   margin-left: -8em
   padding: 0 1em
+
+  -ms-word-break: break-all
+  word-break: break-all
+  /* Non standard for webkit */
+  word-break: break-word
+  -webkit-hyphens: auto
+  -moz-hyphens: auto
+  -ms-hyphens: auto
+  hyphens: auto
+  word-wrap: hyphenate
+
 
 
 @media screen

@@ -1,11 +1,19 @@
 :coffeescript
   $ ->
     $('body').imagesLoaded ->
-      $('.screen-only .loading').hide()
-      $('.screen-only .sign-in').show()
+      # the_name_width = $('.the-name').outerWidth()
+      # the_name_height = $('.the-name').outerHeight()
+      # the_format_width = $('.cover .print-page-content').outerWidth()
+      # $('.the-name').css('margin-left', the_name_width / -2)
+      # $('.the-name').css('margin-top', the_name_height / -2)
+
+      # $('.screen-only .loading').hide()
+      # $('.screen-only .sign-in').show()
+      
       window.print()
       setTimeout( ->
         window.location = "/cleaning"
+        # console.log 'lol'
       ,
         3000
       )
