@@ -66,11 +66,12 @@
             %p
               Welcome to your life
               = fb_user.name
-          .dates
-            .born
-              %p
-                born:
-                = fb_user.birthday
+          - if fb_user.birthday != nil
+            .dates
+              .born
+                %p
+                  born:
+                  = fb_user.birthday
 
 
       - looped_once = false
